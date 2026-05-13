@@ -1,0 +1,21 @@
+name: Generate My Private Key
+on:
+  workflow_dispatch: # 允许手动点击运行
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Generate JKS File
+        run: |
+          # 关键命令：生成签名文件
+          # alias: 别名，这里叫 my-alias
+          # storepass: 仓库密码
+          # keypass: 秘钥密码
+          keytool -genkeypair -v -keystore my-release-key.jks -keyalg RSA -keysize 2048 -validity 10000 -alias my-alias -storepass mypassword123 -keypass mypassword123 -dname "CN=MyAssistant, OU=Tools, O=Personal, L=City, S=State, C=CN"
+          
+      - name: Upload Result
+        uses: actions/upload-artifact@v4
+        with:
+          name: my-private-key-package
+          path: my-release-key.jks
